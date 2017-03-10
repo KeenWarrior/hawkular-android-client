@@ -48,35 +48,38 @@ import icepick.State;
 
 
 public class TriggerDetailFragment extends android.support.v4.app.Fragment {
-            @State
-            @Nullable
-            Trigger trigger;
-    @BindView(R.id.add_button)
+
+    @State
+    @Nullable
+    Trigger trigger;
+
+    @BindView(R.id.favourite_button)
     ImageButton button;
-
-    @BindView(R.id.text_title)
-    TextView textView;
-
 
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_trigger_detail,container,false);
     }
 
-    @OnClick(R.id.add_button)
-    public void addTrigger(){
+    @OnClick(R.id.favourite_button)
+    public void toggleTriggerFavouriteStatus(){
         Context context = getActivity();
         final Animation myAnim = AnimationUtils.loadAnimation(context, R.anim.bounce);
         MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 20);
         myAnim.setInterpolator(interpolator);
 
-        button.setColorFilter(getResources().getColor(R.color.background_primary));
-        button.startAnimation(myAnim);
-
-        textView.setText("Trigger Added");
         SQLStore<Trigger> store = openStore(context);
         store.openSync();
-        store.save(trigger);
+        if (store.read(trigger.getId()) == null) {
+            store.save(trigger);
+            button.setColorFilter(getResources().getColor(R.color.background_primary));
+            button.startAnimation(myAnim);
+        } else {
+            store.remove(trigger.getId());
+            button.setColorFilter(getResources().getColor(R.color.background_secondary));
+            button.startAnimation(myAnim);
+        }
+        store.close();
     }
 
     private SQLStore<Trigger> openStore(Context context) {
@@ -101,5 +104,16 @@ public class TriggerDetailFragment extends android.support.v4.app.Fragment {
         setUpBindings();
 
         trigger = getArguments().getParcelable(Fragments.Arguments.TRIGGER);
+
+        SQLStore<Trigger> store = openStore(getContext());
+        store.openSync();
+
+        if(store.read(trigger.getId()) == null) {
+            button.setColorFilter(getResources().getColor(R.color.background_secondary));
+        } else {
+            button.setColorFilter(getResources().getColor(R.color.background_primary));
+        }
+
+        store.close();
     }
 }
