@@ -16,15 +16,14 @@
  */
 package org.hawkular.client.android.backend.model;
 
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
-public final class ResourceProperties implements Parcelable {
-    @SerializedName("url")
+public final class ResourceProperties {
+    @Json(name = "url")
     private String url;
 
     @VisibleForTesting
@@ -36,29 +35,4 @@ public final class ResourceProperties implements Parcelable {
         return url;
     }
 
-    public static Creator<ResourceProperties> CREATOR = new Creator<ResourceProperties>() {
-        @Override
-        public ResourceProperties createFromParcel(Parcel parcel) {
-            return new ResourceProperties(parcel);
-        }
-
-        @Override
-        public ResourceProperties[] newArray(int size) {
-            return new ResourceProperties[size];
-        }
-    };
-
-    private ResourceProperties(Parcel parcel) {
-        this.url = parcel.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeString(url);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 }

@@ -18,22 +18,20 @@ package org.hawkular.client.android.backend.model;
 
 import org.jboss.aerogear.android.core.RecordId;
 
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.VisibleForTesting;
 
-public class Operation implements Parcelable {
+public class Operation {
 
     @RecordId
-    @SerializedName("id")
+    @Json(name = "id")
     private String id;
 
-    @SerializedName("name")
+    @Json(name = "name")
     private String name;
 
-    @SerializedName("path")
+    @Json(name = "path")
     private String path;
 
     @VisibleForTesting
@@ -56,36 +54,6 @@ public class Operation implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public static Creator<Operation> CREATOR = new Creator<Operation>() {
-        @Override
-        public Operation createFromParcel(Parcel parcel) {
-            return new Operation(parcel);
-        }
-
-        @Override
-        public Operation[] newArray(int size) {
-            return new Operation[size];
-        }
-    };
-
-    private Operation(Parcel parcel) {
-        this.id = parcel.readString();
-        this.name = parcel.readString();
-        this.path = parcel.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeString(id);
-        parcel.writeString(name);
-        parcel.writeString(path);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
 }

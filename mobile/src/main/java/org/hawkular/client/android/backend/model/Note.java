@@ -20,26 +20,24 @@ package org.hawkular.client.android.backend.model;
 
 import org.jboss.aerogear.android.core.RecordId;
 
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
-public final class Note implements Parcelable {
+public final class Note {
 
     @RecordId
-    @SerializedName("alertid")
+    @Json(name = "alertid")
     private String alertid;
 
-    @SerializedName("user")
+    @Json(name = "user")
     private String user;
 
-    @SerializedName("text")
+    @Json(name = "text")
     private String message;
 
-    @SerializedName("ctime")
+    @Json(name = "ctime")
     private long timestamp;
 
     @VisibleForTesting
@@ -75,38 +73,6 @@ public final class Note implements Parcelable {
 
     public long getTimestamp() {
         return timestamp;
-    }
-
-    public static Creator<Note> CREATOR = new Creator<Note>() {
-        @Override
-        public Note createFromParcel(Parcel parcel) {
-            return new Note(parcel);
-        }
-
-        @Override
-        public Note[] newArray(int size) {
-            return new Note[size];
-        }
-    };
-
-    private Note(Parcel parcel) {
-        this.alertid = parcel.readString();
-        this.user = parcel.readString();
-        this.timestamp = parcel.readLong();
-        this.message = parcel.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeString(alertid);
-        parcel.writeString(user);
-        parcel.writeLong(timestamp);
-        parcel.writeString(message);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
 }

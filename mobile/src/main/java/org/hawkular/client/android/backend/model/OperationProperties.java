@@ -17,17 +17,16 @@
 package org.hawkular.client.android.backend.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class OperationProperties implements Parcelable {
+public class OperationProperties {
 
-    @SerializedName("value")
+    @Json(name = "value")
     private Map<String, OperationParameter> operationParameters;
 
     public Map<String, OperationParameter> getOperationParameters() {
@@ -45,28 +44,4 @@ public class OperationProperties implements Parcelable {
         }
     }
 
-    public static final Creator<OperationProperties> CREATOR = new Creator<OperationProperties>() {
-        @Override
-        public OperationProperties createFromParcel(Parcel in) {
-            return new OperationProperties(in);
-        }
-
-        @Override
-        public OperationProperties[] newArray(int size) {
-            return new OperationProperties[size];
-        }
-    };
-
-    @Override public int describeContents() {
-        return 0;
-    }
-
-    @Override public void writeToParcel(Parcel parcel, int flags) {
-
-        parcel.writeInt(operationParameters.size());
-        for(Map.Entry<String,OperationParameter> entry : operationParameters.entrySet()){
-            parcel.writeString(entry.getKey());
-            parcel.writeValue(entry.getValue());
-        }
-    }
 }

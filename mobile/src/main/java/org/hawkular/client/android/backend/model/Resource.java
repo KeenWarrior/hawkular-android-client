@@ -16,27 +16,25 @@
  */
 package org.hawkular.client.android.backend.model;
 
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
-public final class Resource implements Parcelable {
-    @SerializedName("id")
+public final class Resource {
+    @Json(name = "id")
     private String id;
 
-    @SerializedName("name")
+    @Json(name = "name")
     private String name;
 
-    @SerializedName("type")
+    @Json(name = "type")
     private ResourceType type;
 
-    @SerializedName("path")
+    @Json(name = "path")
     private String path;
 
-    @SerializedName("properties")
+    @Json(name = "properties")
     private ResourceProperties properties;
 
     @VisibleForTesting
@@ -72,42 +70,8 @@ public final class Resource implements Parcelable {
         return null;
     }
 
-
     public ResourceProperties getProperties() {
         return properties;
     }
 
-    public static Creator<Resource> CREATOR = new Creator<Resource>() {
-        @Override
-        public Resource createFromParcel(Parcel parcel) {
-            return new Resource(parcel);
-        }
-
-        @Override
-        public Resource[] newArray(int size) {
-            return new Resource[size];
-        }
-    };
-
-    private Resource(Parcel parcel) {
-        this.id = parcel.readString();
-        this.name = parcel.readString();
-        this.type = parcel.readParcelable(ResourceType.class.getClassLoader());
-        this.path = parcel.readString();
-        this.properties = parcel.readParcelable(ResourceProperties.class.getClassLoader());
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeString(id);
-        parcel.writeString(name);
-        parcel.writeParcelable(type, flags);
-        parcel.writeString(path);
-        parcel.writeParcelable(properties, flags);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 }

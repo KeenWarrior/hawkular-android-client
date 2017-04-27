@@ -16,20 +16,17 @@
  */
 package org.hawkular.client.android.backend.model;
 
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+public class TriggerDetail {
 
-public class TriggerDetail extends Trigger implements Parcelable {
-
-    @SerializedName("autoResolve")
+    @Json(name = "autoResolve")
     private boolean autoResolve;
 
-    @SerializedName("autoEnable")
+    @Json(name = "autoEnable")
     private boolean autoEnable;
 
-    @SerializedName("autoDisable")
+    @Json(name = "autoDisable")
     private boolean autoDisable;
 
     public boolean isAutoResolve() {
@@ -42,33 +39,6 @@ public class TriggerDetail extends Trigger implements Parcelable {
 
     public boolean isAutoDisable() {
         return autoDisable;
-    }
-
-    public static Creator<TriggerDetail> CREATOR = new Creator<TriggerDetail>() {
-        @Override
-        public TriggerDetail createFromParcel(Parcel parcel) {
-            return new TriggerDetail(parcel);
-        }
-
-        @Override
-        public TriggerDetail[] newArray(int size) {
-            return new TriggerDetail[size];
-        }
-    };
-
-    protected TriggerDetail(Parcel parcel) {
-        super(parcel);
-        this.autoResolve = Boolean.getBoolean(parcel.readString());
-        this.autoEnable = Boolean.getBoolean(parcel.readString());
-        this.autoDisable = Boolean.getBoolean(parcel.readString());
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        super.writeToParcel(parcel, flags);
-        parcel.writeString(Boolean.toString(this.autoResolve));
-        parcel.writeString(Boolean.toString(this.autoEnable));
-        parcel.writeString(Boolean.toString(this.autoDisable));
     }
 
 }
