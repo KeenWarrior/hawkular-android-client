@@ -17,23 +17,22 @@
 package org.hawkular.client.android.backend.model;
 
 
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
-public class OperationParameter implements Parcelable {
+public class OperationParameter {
 
-    @SerializedName("type")
+    @Json(name = "type")
     private String type;
 
-    @SerializedName("description")
+    @Json(name = "description")
     private String description;
 
-    @SerializedName("defaultValue")
+    @Json(name = "defaultValue")
     private String defaultValue;
 
-    @SerializedName("required")
+    @Json(name = "required")
     private boolean required;
 
     public OperationParameter(Parcel parcel) {
@@ -59,27 +58,4 @@ public class OperationParameter implements Parcelable {
         return required;
     }
 
-
-    @Override public int describeContents() {
-        return 0;
-    }
-
-    @Override public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(type);
-        parcel.writeString(description);
-        parcel.writeString(defaultValue);
-        parcel.writeString(required ? "true" : "false");
-    }
-
-    public static Creator<OperationParameter> CREATOR = new Creator<OperationParameter>() {
-        @Override
-        public OperationParameter createFromParcel(Parcel parcel) {
-            return new OperationParameter(parcel);
-        }
-
-        @Override
-        public OperationParameter[] newArray(int size) {
-            return new OperationParameter[size];
-        }
-    };
 }

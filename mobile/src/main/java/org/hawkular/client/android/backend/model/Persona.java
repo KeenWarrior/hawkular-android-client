@@ -16,15 +16,13 @@
  */
 package org.hawkular.client.android.backend.model;
 
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
-public final class Persona implements Parcelable {
-    @SerializedName("id")
+public final class Persona {
+    @Json(name = "id")
     private String id;
 
     @VisibleForTesting
@@ -36,29 +34,4 @@ public final class Persona implements Parcelable {
         return id;
     }
 
-    public static Creator<Persona> CREATOR = new Creator<Persona>() {
-        @Override
-        public Persona createFromParcel(Parcel parcel) {
-            return new Persona(parcel);
-        }
-
-        @Override
-        public Persona[] newArray(int size) {
-            return new Persona[size];
-        }
-    };
-
-    private Persona(Parcel parcel) {
-        this.id = parcel.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeString(id);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 }
