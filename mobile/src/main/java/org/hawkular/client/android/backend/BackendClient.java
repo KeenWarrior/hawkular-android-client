@@ -44,6 +44,8 @@ import org.hawkular.client.android.backend.model.OperationProperties;
 import org.hawkular.client.android.backend.model.Persona;
 import org.hawkular.client.android.backend.model.Resource;
 import org.hawkular.client.android.backend.model.Trigger;
+import org.hawkular.client.android.service.AcknowledgeAlertService;
+import org.hawkular.client.android.service.ResolveAlertService;
 import org.hawkular.client.android.service.TriggerService;
 import org.hawkular.client.android.util.CanonicalPath;
 import org.hawkular.client.android.util.Ports;
@@ -212,6 +214,23 @@ public final class BackendClient {
     public void acknowledgeAlert(@NonNull Alert alert,
                                  @NonNull Callback<List<String>> callback) {
         savePipe(BackendPipes.Names.ALERT_ACKNOWLEDGE, alert, callback);
+    }
+
+    public void acknowledgeRetroAlert(@NonNull Alert alert,
+                                 @NonNull retrofit2.Callback<List<String>> callback) {
+
+        AcknowledgeAlertService service = retrofit.create(AcknowledgeAlertService.class);
+        Call call = service.post();
+        call.enqueue(callback);
+
+    }
+
+    public void resolveRetroAlert(@NonNull Alert alert,
+                                  @NonNull retrofit2.Callback<List<String>> callback) {
+
+        ResolveAlertService service = retrofit.create(ResolveAlertService.class);
+        Call call = service.post();
+        call.enqueue(callback);
     }
 
     public void resolveAlert(@NonNull Alert alert,
