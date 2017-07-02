@@ -32,6 +32,8 @@ import org.hawkular.client.android.auth.SecretStoreAuthzModule;
 import org.hawkular.client.android.backend.model.Alert;
 import org.hawkular.client.android.backend.model.Environment;
 import org.hawkular.client.android.backend.model.Feed;
+import org.hawkular.client.android.backend.model.FullTrigger;
+import org.hawkular.client.android.backend.model.InventoryResponseBody;
 import org.hawkular.client.android.backend.model.Metric;
 import org.hawkular.client.android.backend.model.MetricAvailabilityBucket;
 import org.hawkular.client.android.backend.model.MetricBucket;
@@ -67,7 +69,6 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ServiceCompat;
 import android.util.Base64;
 
 import retrofit2.Call;
@@ -219,10 +220,6 @@ public final class BackendClient {
         return triggerIds;
     }
 
-    public void acknowledgeAlert(@NonNull Alert alert,
-                                 @NonNull Callback<List<String>> callback) {
-        savePipe(BackendPipes.Names.ALERT_ACKNOWLEDGE, alert, callback);
-    }
 
     public void acknowledgeRetroAlert(@NonNull Alert alert,
                                  @NonNull retrofit2.Callback<List<String>> callback) {
@@ -241,11 +238,6 @@ public final class BackendClient {
         call.enqueue(callback);
     }
 
-    public void resolveAlert(@NonNull Alert alert,
-                             @NonNull Callback<List<String>> callback) {
-        savePipe(BackendPipes.Names.ALERT_RESOLVE, alert, callback);
-    }
-
 
     public void noteOnAlert(@NonNull Note note,
                             @NonNull Callback<List<String>> callback) {
@@ -256,11 +248,29 @@ public final class BackendClient {
         savePipe(BackendPipes.Names.UPDATE_TRIGGER,trigger,callback);
     }
 
+    public void updateRetroTrigger(@NonNull Trigger trigger, @NonNull retrofit2.Callback<List<String>> callback){
+        TriggerService service = retrofit.create(TriggerService.class);
+        Call call = service.postUpdateTrigger(trigger);
+        call.enqueue(callback);
+    }
 
-    public void getFeeds(@NonNull Callback<List<Feed>> callback) {
+
+    public void createRetroTrigger(@NonNull FullTrigger trigger, @NonNull retrofit2.Callback<List<String>> callback){
+        TriggerService service = retrofit.create(TriggerService.class);
+        Call call = service.postCreateTrigger(trigger);
+        call.enqueue(callback);
+    }
+
+
+
+    public void getRetroFeeds(@NonNull retrofit2.Callback<Feed> callback) {
         URI uri = Uris.getUri(BackendPipes.Paths.FEEDS);
 
-        readPipe(BackendPipes.Names.FEEDS, uri, callback);
+        TriggerService service = retrofit.create(TriggerService.class);
+        Call call = service.getFeeds();
+        call.enqueue(callback);
+
+        //readPipe(BackendPipes.Names.FEEDS, uri, callback);
     }
 
     public void getOpreations(@NonNull Callback<List<Operation>> callback, Resource resource) {
@@ -277,10 +287,12 @@ public final class BackendClient {
         readPipe(BackendPipes.Names.OPERATION_PROPERTIES, uri, callback);
     }
 
-    public void getResourcesFromFeed(@NonNull Callback<List<Resource>> callback, Feed feed) {
-        URI uri = Uris.getUri(CanonicalPath.getByString(feed.getPath()).fix(BackendPipes.Paths.FEED_RESOURCES));
+    public void getRetroResourcesFromFeed(@NonNull retrofit2.Callback<List<Resource>> callback, @NonNull InventoryResponseBody body){
+        URI uri = Uris.getUri(BackendPipes.Paths.FEED_RESOURCES);
 
-        readPipe(BackendPipes.Names.FEED_RESOURCES, uri, callback);
+        TriggerService service = retrofit.create(TriggerService.class);
+        Call call = service.postGetResourcesFromFeed(body);
+        call.enqueue(callback);
     }
 
 

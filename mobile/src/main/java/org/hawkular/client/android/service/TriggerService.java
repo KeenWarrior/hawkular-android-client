@@ -19,11 +19,16 @@ package org.hawkular.client.android.service;
 import java.util.List;
 import java.util.Map;
 
+import org.hawkular.client.android.backend.model.Feed;
+import org.hawkular.client.android.backend.model.FullTrigger;
+import org.hawkular.client.android.backend.model.InventoryResponseBody;
+import org.hawkular.client.android.backend.model.Resource;
 import org.hawkular.client.android.backend.model.Trigger;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Query;
+import retrofit2.http.POST;
 import retrofit2.http.QueryMap;
 
 public interface TriggerService {
@@ -32,4 +37,23 @@ public interface TriggerService {
     Call<List<Trigger>> get(
             @QueryMap Map<String, String> parameters
     );
+
+    @POST("/hawkular/alerts/triggers")
+    Call<List<String>> postUpdateTrigger(
+            @Body Trigger trigger
+    );
+
+    @POST("/hawkular/alerts/triggers")
+    Call<FullTrigger> postCreateTrigger(
+            @Body FullTrigger trigger
+    );
+
+    @POST("/hawkular/metrics/strings/raw/query/")
+    Call<List<Resource>> postGetResourcesFromFeed(
+            @Body InventoryResponseBody inventoryResponseBody
+            );
+
+    @GET("/hawkular/metrics/strings/tags/module:inventory,feed:*")
+    Call<Feed> getFeeds();
+
 }
